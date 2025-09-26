@@ -2,13 +2,17 @@ import streamlit as st
 import pandas as pd
 import joblib  
 
+st.set_page_config(page_title="Customer Churn Prediction", layout="wide")
+
 st.title("Customer Churn Prediction (Classification) 🅰️")
+
 st.write(
     "This application predicts customer churn — "
     "whether a customer will leave (1) or stay (0) — "
     "based on their usage patterns, subscription details, and demographic factors."
 )
 
+# Sidebar inputs
 st.sidebar.header("Classification Input Features")
 
 call_failure = st.sidebar.number_input("Call Failure", min_value=0, max_value=100, value=0, step=1)
@@ -47,9 +51,39 @@ st.dataframe(df_input)
 
 if st.button("Predict"):
     model = joblib.load("rf_churn_model.pkl")
-    prediction = model.predict(df_input)    
+    prediction = model.predict(df_input)
+    
     if prediction[0] == 1:
         st.error("The model predicts: Customer will leave ❌")
     else:
         st.success("The model predicts: Customer will stay ✅")
+
+# Move project description here (below summary and prediction)
+st.markdown("""
+### 📖 Customer Churn Prediction (Classification)
+
+Customer churn is a major challenge in telecom and subscription-based businesses.  
+This module applies a **classification model** to predict whether a customer will churn  
+(**1 = leave**) or remain (**0 = stay**).
+
+**Features considered include:**
+- Call Failures & Complaints  
+- Subscription Length  
+- Charge Amount & Usage Patterns  
+- Frequency of Use (Calls & SMS)  
+- Distinct Called Numbers  
+- Age Group  
+- Tariff Plan & Status  
+- Customer Value  
+
+With these inputs, the model predicts whether the customer is at risk of leaving.
+
+✅ **Output Options:**  
+- ❌ Customer will leave (high churn risk)  
+- ✅ Customer will stay (low churn risk)  
+""")
+
+st.image("././static/Classification model.png", caption="Classification model")
+
+
 
